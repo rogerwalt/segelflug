@@ -1,5 +1,5 @@
 <?
-$dbh = new PDO('mysql:host=localhost;dbname=segelflug;charset=utf8', 'segelflug', 'AyurBGRjW9cz2qx3');
+include('db.inc.php');
 
 switch ($_GET['correct']) {
 	case true:
