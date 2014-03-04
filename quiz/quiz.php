@@ -18,53 +18,37 @@ function print_numberof_questions_for_subject($dbh, $subject) {
 function print_table_for_subject($dbh, $subject) {
     //$sql = 'SELECT * FROM questions_merged WHERE subject = '.$dbh->quote($subject).' ORDER BY id asc';
     /*
-    -- g1
-SELECT id_question, 1-correct/(correct+wrong) AS g1 FROM answer_statistics
+    Original weighting query:
+SET @subject = 'Luftrecht';
 
--- g2
-	-- questions in subject
-	SELECT count(*) AS QiS FROM questions_merged WHERE subject = 'Luftrecht'
-	-- or
-	SELECT count(*) AS QiS FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
-	
-	-- how many times was this question answered
-	SELECT correct+wrong FROM answer_statistics
-	-- how many times were all questions in this subject answered
-	SELECT sum(correct)+sum(wrong) FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
+SET @num_questions_in_subject = (SELECT count(*) FROM questions_merged WHERE subject = @subject);
 
-	-- g2 total
-	SELECT -2/3*count(*)*(correct+wrong)/(sum(correct)+sum(wrong))+4/3 FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
+SET @num_questions_answered_in_subject = (SELECT sum(correct)+sum(wrong) FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht'));
+
+SELECT id_question, g_tilde*rand() AS weight FROM (
+  SELECT id_question, g1, g2, IFNULL(g1/g2,0), g1+g2+IFNULL(g1/g2,0) AS g_tilde FROM (
+    SELECT id_question, g1, GREATEST(0.1, LEAST(g2_tilde, 1)) AS g2
+    FROM (
+      SELECT id_question, IFNULL(-correct/(correct+wrong)+1, 0) AS g1, -2/3*@num_questions_in_subject*(correct+wrong)/@num_questions_answered_in_subject+4/3 AS g2_tilde
+      FROM answer_statistics
+      WHERE id_question IN (
+        SELECT id FROM questions_merged WHERE subject = @subject)
+    ) AS g2_tilde_table) AS weight
+  ) AS g_tilde_table
+ORDER BY weight DESC
     */
     $sql = 
-'SELECT
-    *,
-    (weight_answered_less_often+weight_answered_wrong+weight_answered_correctly)*RAND() AS order_column
-    FROM (SELECT
-        id_question,
-        0.5 AS weight_answered_less_often,
-        0 AS weight_answered_wrong,
-        0 AS weight_answered_correctly
-        FROM answer_statistics
-        WHERE 0.6*(correct+wrong < (SELECT (sum(correct)+sum(wrong))/count(*) FROM answer_statistics))
-    UNION
-        SELECT id_question,
-        0 AS weight_answered_less_often,
-        0.3 AS weight_answered_wrong,
-        0 AS weight_answered_correctly
-        FROM answer_statistics
-        WHERE wrong>correct
-    UNION
-        SELECT id_question,
-        0 AS weight_answered_less_often,
-        0 AS weight_answered_wrong,
-        0.2 AS weight_answered_correctly
-        FROM answer_statistics
-        WHERE correct>wrong
-    ) AS weights
-    JOIN questions_merged ON weights.id_question = questions_merged.id
-    WHERE subject = '.$dbh->quote($subject).'
-    ORDER BY order_column DESC
-    LIMIT 10';
+'SELECT id_question, g_tilde*rand() AS weight FROM (
+  SELECT id_question, g1, g2, IFNULL(g1/g2,0), g1+g2+IFNULL(g1/g2,0) AS g_tilde FROM (
+    SELECT id_question, g1, GREATEST(0.1, LEAST(g2_tilde, 1)) AS g2
+    FROM (
+      SELECT id_question, IFNULL(-correct/(correct+wrong)+1, 0) AS g1, -2/3*(SELECT count(*) FROM questions_merged WHERE subject = 'Luftrecht')*(correct+wrong)/(SELECT sum(correct)+sum(wrong) FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht'))+4/3 AS g2_tilde
+      FROM answer_statistics
+      WHERE id_question IN (
+        SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
+    ) AS g2_tilde_table) AS weight
+  ) AS g_tilde_table
+ORDER BY weight DESC';
     $str = '';
     try{
         foreach($dbh->query($sql) as $row) {
