@@ -17,6 +17,24 @@ function print_numberof_questions_for_subject($dbh, $subject) {
 
 function print_table_for_subject($dbh, $subject) {
     //$sql = 'SELECT * FROM questions_merged WHERE subject = '.$dbh->quote($subject).' ORDER BY id asc';
+    /*
+    -- g1
+SELECT id_question, 1-correct/(correct+wrong) AS g1 FROM answer_statistics
+
+-- g2
+	-- questions in subject
+	SELECT count(*) AS QiS FROM questions_merged WHERE subject = 'Luftrecht'
+	-- or
+	SELECT count(*) AS QiS FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
+	
+	-- how many times was this question answered
+	SELECT correct+wrong FROM answer_statistics
+	-- how many times were all questions in this subject answered
+	SELECT sum(correct)+sum(wrong) FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
+
+	-- g2 total
+	SELECT -2/3*count(*)*(correct+wrong)/(sum(correct)+sum(wrong))+4/3 FROM answer_statistics WHERE id_question IN (SELECT id FROM questions_merged WHERE subject = 'Luftrecht')
+    */
     $sql = 
 'SELECT
     *,
