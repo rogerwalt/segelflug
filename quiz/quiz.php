@@ -19,6 +19,17 @@ function print_table_for_subject($dbh, $subject) {
     //$sql = 'SELECT * FROM questions_merged WHERE subject = '.$dbh->quote($subject).' ORDER BY id asc';
     /*
     Original weighting query:
+DROP FUNCTION IF EXISTS gauss;
+DELIMITER //
+CREATE FUNCTION gauss(mean float, stdev float) RETURNS float
+BEGIN
+set @x=rand(), @y=rand();
+set @gaus = ((sqrt(-2*log(@x))*cos(2*pi()*@y))*stdev)+mean;
+return @gaus;
+END
+//
+DELIMITER;    
+
 SET @subject = 'Luftrecht';
 
 SET @num_questions_in_subject = (SELECT count(*) FROM questions_merged WHERE subject = @subject);
