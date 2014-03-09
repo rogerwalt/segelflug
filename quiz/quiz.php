@@ -156,8 +156,19 @@ ORDER BY weight DESC';
 <body>
     <h1>Segelflug Theoriefragen</h1>
     Total <? print_total_questions($dbh) ?> Fragen.
+    <ul>
+        <li><a href="#Luftrecht">10 Luftrecht</a></li>
+        <li><a href="#Luftfahrzeugkenntnis">20 Allgemeine Luftfahrzeugkenntnis</a></li>
+        <li><a href="#Flugleistungen">30 Flugleistungen und Flugplanung</a></li>
+        <li><a href="#Menschliches">40 Menschliches Leistungsvermögen</a></li>
+        <li><a href="#Meteorologie">50 Meteorologie</a></li>
+        <li><a href="#Navigation">60 Navigation</a></li>
+        <li><a href="#Betriebsverfahren">70 Betriebsverfahren</a></li>
+        <li><a href="#Grundlagen">80 Grundlagen des Fluges</a></li>
+        <li><a href="#Sprechfunk">90 Sprechfunk für Segelflieger</a></li>
+    </ul>
 
-    <h2>10 Luftrecht</h2>
+    <h2 id="Luftrecht">10 Luftrecht</h2>
     <? print_numberof_questions_for_subject($dbh, 'Luftrecht') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -170,7 +181,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Luftrecht') ?></tbody>
     </table>
 
-    <h2>20 Allgemeine Luftfahrzeugkenntnis</h2>
+    <h2 id="Luftfahrzeugkenntnis">20 Allgemeine Luftfahrzeugkenntnis</h2>
     <? print_numberof_questions_for_subject($dbh, 'Allgemeine Luftfahrzeugkenntnis') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -183,7 +194,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Allgemeine Luftfahrzeugkenntnis') ?></tbody>
     </table>
 
-    <h2>30 Flugleistungen und Flugplanung</h2>
+    <h2 id="Flugleistungen">30 Flugleistungen und Flugplanung</h2>
     <? print_numberof_questions_for_subject($dbh, 'Flugleistungen und Flugplanung') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -196,7 +207,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Flugleistungen und Flugplanung') ?></tbody>
     </table>
 
-    <h2>40 Menschliches Leistungsvermögen</h2>
+    <h2 id="Menschliches">40 Menschliches Leistungsvermögen</h2>
     <? print_numberof_questions_for_subject($dbh, 'Menschliches Leistungsvermögen') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -209,7 +220,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Menschliches Leistungsvermögen') ?></tbody>
     </table>
 
-    <h2>50 Meteorologie</h2>
+    <h2 id="Meteorologie">50 Meteorologie</h2>
     <? print_numberof_questions_for_subject($dbh, 'Meteorologie') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -222,7 +233,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Meteorologie') ?></tbody>
     </table>
 
-    <h2>60 Navigation</h2>
+    <h2 id="Navigation">60 Navigation</h2>
     <? print_numberof_questions_for_subject($dbh, 'Navigation') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -235,7 +246,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Navigation') ?></tbody>
     </table>
 
-    <h2>70 Betriebsverfahren</h2>
+    <h2 id="Betriebsverfahren">70 Betriebsverfahren</h2>
     <? print_numberof_questions_for_subject($dbh, 'Betriebsverfahren') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -248,7 +259,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Betriebsverfahren') ?></tbody>
     </table>
 
-    <h2>80 Grundlagen des Fluges</h2>
+    <h2 id="Grundlagen">80 Grundlagen des Fluges</h2>
     <? print_numberof_questions_for_subject($dbh, 'Grundlagen des Fluges') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
@@ -261,7 +272,7 @@ ORDER BY weight DESC';
         <tbody><? print_table_for_subject($dbh, 'Grundlagen des Fluges') ?></tbody>
     </table>
 
-    <h2>90 Sprechfunk für Segelflieger</h2>
+    <h2 id="Sprechfunk">90 Sprechfunk für Segelflieger</h2>
     <? print_numberof_questions_for_subject($dbh, 'Sprechfunk für Segelflieger') ?> Fragen.
     <table style="border: solid black 1px;">
         <thead>
