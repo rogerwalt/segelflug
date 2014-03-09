@@ -49,7 +49,7 @@ SELECT id_question, g_tilde*rand() AS weight FROM (
 ORDER BY weight DESC
     */
     $sql = 
-'SELECT id_question, g_tilde*rand() AS weight FROM (
+'SELECT id_question, g_tilde*(SELECT `gauss` (0.5, 0.3) AS `gauss`) AS weight FROM (
   SELECT id_question, g1, g2, IFNULL(g1/g2,0), g1+g2+IFNULL(g1/g2,0) AS g_tilde FROM (
     SELECT id_question, g1, GREATEST(0.1, LEAST(g2_tilde, 1)) AS g2
     FROM (
@@ -63,6 +63,23 @@ ORDER BY weight DESC';
     $str = '';
     try{
         foreach($dbh->query($sql) as $row) {
+            // shuffle answers
+            $answers = array();
+            $ans = array();
+            $ans['answer'] = $row['answer1'];
+            $ans['correct'] = $row['answer1_correct'];
+            $answers[] = $ans;
+            $ans['answer'] = $row['answer2'];
+            $ans['correct'] = $row['answer2_correct'];
+            $answers[] = $ans;
+            $ans['answer'] = $row['answer3'];
+            $ans['correct'] = $row['answer3_correct'];
+            $answers[] = $ans;
+            $ans['answer'] = $row['answer4'];
+            $ans['correct'] = $row['answer4_correct'];
+            $answers[] = $ans;
+            shuffle($answers);
+            
             $str .= '<tr data-id="'.$row['id'].'"><td>'.$row['question'].'</td><td class="answer" data-correct="'.$row['answer1_correct'].'">'.$row['answer1'].'</td><td class="answer" data-correct="'.$row['answer2_correct'].'">'.$row['answer2'].'</td><td class="answer" data-correct="'.$row['answer3_correct'].'">'.$row['answer3'].'</td><td class="answer" data-correct="'.$row['answer4_correct'].'">'.$row['answer4'].'</td></tr>'."\n";
         }
     } catch (PDOException $ex) {
