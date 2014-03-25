@@ -34,12 +34,23 @@ CREATE TABLE IF NOT EXISTS `questions_merged` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
+CREATE TABLE IF NOT EXISTS `answer_statistics` (
+  `id_question` int(11) NOT NULL,
+  `correct` int(11) NOT NULL,
+  `wrong` int(11) NOT NULL,
+  PRIMARY KEY (`id_question`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 // merge questions (make them unique):
 TRUNCATE TABLE questions_merged;
 INSERT INTO questions_merged (subject, question, answer1, answer2, answer3, answer4, answer1_correct, answer2_correct, answer3_correct, answer4_correct) SELECT subject, question, answer1, answer2, answer3, answer4, answer1_correct, answer2_correct, answer3_correct, answer4_correct
 FROM questions
 GROUP BY question
 ORDER BY subject, id;
+
+// initialize answer_statistics
+INSERT INTO answer_statistics (id_question)
+SELECT id FROM questions_merged
 */
 
 $dbh = new PDO('mysql:host=localhost;dbname=segelflug;charset=utf8', 'segelflug', 'AyurBGRjW9cz2qx3');
